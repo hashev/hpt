@@ -526,6 +526,8 @@ void allDiff(char * nam, char * var, ...)
 void processConfig(void)
 {
     char * buff = NULL;
+    int charsetStatus;
+    const char * charsetPolicy;
 
 /* #if !defined(__OS2__) && !defined(UNIX) */
 /*    time_t   time_cur, locklife = 0; */
@@ -718,7 +720,14 @@ void processConfig(void)
             NULL);
     /*  load recoding tables */
     initCharsets();
-    getctabs(config->intab, config->outtab);
+    charsetStatus = getctabs(config->intab, config->outtab);
+    charsetPolicy = getenv("FFIDO_HPT_KOI8_CP866");
+    if(charsetPolicy != NULL && strcmp(charsetPolicy, "1") == 0 &&
+       (!config->recodeMsgBase || config->intab == NULL || config->outtab == NULL || charsetStatus != 0))
+    {
+        fprintf(stderr, "FFIDO charset policy requires RecodeMsgBase on and readable valid intab/outtab tables\n");
+        exit(EX_CONFIG);
+    }
     w_log(LL_START, "Start");
 } /* processConfig */
 

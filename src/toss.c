@@ -39,6 +39,7 @@
  * $Id$
  */
 #include <string.h>
+#include <strings.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <ctype.h>
@@ -248,7 +249,10 @@ int putMsgInArea(s_area * echo, s_message * msg, int strip, dword forceattr)
         if(hmsg != NULL)
         {
             /*  recode from TransportCharset to internal Charset */
-            if((config->recodeMsgBase) && (recode && config->intab != NULL))
+            if((config->recodeMsgBase) && (recode && config->intab != NULL) &&
+               !(getenv("FFIDO_HPT_KOI8_CP866") != NULL &&
+                 strcmp(getenv("FFIDO_HPT_KOI8_CP866"), "1") == 0 &&
+                 strcasecmp(echo->areaName, "utf-8") == 0))
             {
                 if((msg->recode & REC_HDR) == 0)
                 {
