@@ -68,13 +68,13 @@
 #endif
 
 /* Local amster2 policy: JAM is KOI8-R except the UTF-8 echo. Opt in only. */
-static int ffidoCharsetPolicy(void)
+int ffidoCharsetPolicy(void)
 {
     const char *value = getenv("FFIDO_HPT_KOI8_CP866");
     return value != NULL && strcmp(value, "1") == 0;
 }
 
-static void ffidoTransportChrs(s_message *msg, const char *chrs)
+void ffidoTransportChrs(s_message *msg, const char *chrs)
 {
     const char *p = msg->text, *end;
     char *text = safe_malloc(strlen(p) + strlen(chrs) + 10), *out = text;

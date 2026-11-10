@@ -73,6 +73,7 @@
 #include <fcommon.h>
 #include <pkt.h>
 #include <scan.h>
+#include <scanarea.h>
 #include <global.h>
 #include "version.h"
 #include <toss.h>
@@ -137,6 +138,11 @@ void convertMsgText(HMSG SQmsg, s_message * msg)
     if((config->recodeMsgBase) && (config->outtab != NULL))
     {
         recodeToTransportCharset((char *)msg->text);
+        /* Netmail uses the same KOI8-R JAM -> CP866 transport policy as echoes. */
+        if(ffidoCharsetPolicy())
+        {
+            ffidoTransportChrs(msg, "CP866 2");
+        }
     }
 } /* convertMsgText */
 
